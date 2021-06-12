@@ -1,0 +1,6 @@
+yarn.lock
+.prettierrc
+items-directive.txt
+package-lock.json
+.env
+node_modules/

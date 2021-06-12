@@ -1,0 +1,31 @@
+doctype html
+html
+    head
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        script(defer, src='https://use.fontawesome.com/releases/v5.3.1/js/all.js')
+        link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
+        link(rel="stylesheet" href="css/styles.css")
+        link(rel="stylesheet" href="css/login.css")
+
+        script(src='js/login.js')
+    body
+        .flex-container
+            form#loginForm
+                #loginBox.box.is-primary
+                    div(style='display: flex; align-items: center; flex-direction: column')
+                        img(src='/img/cozziforms.png' style='height: 100px')
+                    .spacer
+                    .field
+                        p.control.has-icons-left
+                            input.input#usernameTextbox(type='text' placeholder='username')
+                            span.icon.is-small.is-left
+                                i.fas.fa-user
+                    .field
+                        p.control.has-icons-left 
+                            input.input#passwordTextbox(type='password' placeholder='password')
+                            span.icon.is-small.is-left
+                                i.fas.fa-lock
+                    .field 
+                        p.control
+                            button#loginButton.button.is-primary.is-outlined(type='submit') Log In
+                        p#errorText.help.is-danger.is-hidden Invalid username or password!

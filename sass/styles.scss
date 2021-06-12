@@ -1,0 +1,15 @@
+@charset "utf-8";
+
+// override default font to Bree Serif
+@import url('https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap');
+$family-sans-serif: 'Bree Serif';
+
+$navbar-height: 5rem;
+$maroon: #aa012b;
+
+$link: $maroon;
+$primary: $maroon;
+
+@import '../node_modules/bulma/bulma';
+@import 'scrollbars';
+@import 'overrides';

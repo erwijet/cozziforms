@@ -1,0 +1,39 @@
+doctype html
+html
+    head
+        block head
+            title Cozzi Forms
+            include includes/styling
+
+            script(src='/js/layout.js')  
+    body
+        nav.navbar(role='navigation' aria-label='main navigation')
+            .navbar-brand
+                a.navbar-item(href='/')
+                    img(src='/img/cozziforms.png')
+                a.navbar-burger(role='button' aria-label='menu' aria-expanded='false' data-target='navbarPrimary')
+                    span(aria-hidden='true') 
+                    span(aria-hidden='true') 
+                    span(aria-hidden='true')
+            #navbarPrimary.navbar-menu
+                .navbar-start
+                    a.navbar-item(href='/orderlist') Order List
+                    a.navbar-item(href='/waste') Waste Sheet
+                    if user.isAdmin
+                        .navbar-item.has-dropdown.is-hoverable
+                            a.navbar-link Management
+                            .navbar-dropdown
+                                a.navbar-item(href='/manage/items') Manage Items
+                                a.navbar-item(href='/manage/users') Manage Users
+                                a.navbar-item(href='/manage/categories') Manage Categories
+                                a.navbar-item(href='/manage/vendors') Manage Vendors
+                                hr.navbar-divider
+                                a.navbar-item(href='/analytics') Analytics
+                .navbar-end
+                    .navbar-item
+                        .buttons
+                            if user.isAdmin
+                                a.button.is-primary(href='/review') Review Order
+                            a.button.is-light(href='/me') My Account
+        block body
+
