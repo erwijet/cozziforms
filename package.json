@@ -4,6 +4,7 @@
 	"main": "server.ts",
 	"license": "MIT",
 	"scripts": {
+		"start": "ts-node server.ts",
 		"build-sass": "sass --no-source-map -q ./sass/styles.scss ./public/css/styles.css",
 		"build-client": "node ./tasks/build-client",
 		"build-server": "ts-node server.ts",
