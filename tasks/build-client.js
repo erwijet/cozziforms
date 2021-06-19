@@ -9,12 +9,11 @@
 const fs 			= require('fs');
 const { join } 		= require('path');
 const browserify 	= require('browserify');
-const tsify 		= require('tsify');
 
 let i = 1;
 const files = fs
-	.readdirSync(join(__dirname, '..', 'client'))
-	.filter((file) => file.split('.').pop() == 'ts');
+	.readdirSync(join(__dirname, '..', 'client-lib'))
+	.filter((file) => file.split('.').pop() == 'js');
 
 files.forEach((file) => {
 	console.log(`[build-client] Processing ${i++} of ${files.length}`);
@@ -24,13 +23,12 @@ files.forEach((file) => {
 			'..',
 			'public',
 			'js',
-			file.substr(0, file.length - '.ts'.length) + '.js'
+			file.substr(0, file.length - '.js'.length) + '.js'
 		),
 		{ flags: 'w' }
 	);
 
-	browserify(join(__dirname, '..', 'client', file))
-		.plugin(tsify, { esModuleInterop: true })
+	browserify(join(__dirname, '..', 'client-lib', file))
 		.bundle()
 		.on('error', (err) => {
 			throw err;

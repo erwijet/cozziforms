@@ -1,6 +1,7 @@
-import $ from 'jquery';
 import { queryVendors } from './helper/vendors';
 import { queryItems } from './helper/items';
+
+import $ from 'jquery';
 
 async function populateVendorSelect() {
 	const vendors = await queryVendors({});
@@ -23,7 +24,7 @@ async function populateVendorSelect() {
 
  * @param item The document to append. Should be an IItem with a populated vendor path
  */
-function appendItemToTable(item: any) {
+function appendItemToTable(item) {
 	const itemTableBody = $('#itemTable').find('tbody');
 	const newRow = $('<tr>')
 		.attr('itemid', item._id)
@@ -43,7 +44,7 @@ function appendItemToTable(item: any) {
 	newRow.appendTo(itemTableBody);
 }
 
-async function populateItemList(regex: RegExp) {
+async function populateItemList(regex) {
 	const itemTableBody = $('#itemTable').find('tbody');
 
 	itemTableBody.empty();

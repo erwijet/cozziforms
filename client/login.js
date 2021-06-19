@@ -36,8 +36,8 @@ function validate(usr, pas) {
 $(() => {
 	$('#loginForm').on('submit', async (e) => {
 		e.preventDefault();
-		const username = $('#usernameTextbox').val() as string;
-		const rawPass = $('#passwordTextbox').val() as string;
+		const username = $('#usernameTextbox').val();
+		const rawPass = $('#passwordTextbox').val();
 
 		const hashedPass = md5(rawPass);
 		validate(username, hashedPass);
