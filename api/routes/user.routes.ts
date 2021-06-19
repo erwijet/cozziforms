@@ -49,8 +49,12 @@ userApiRouter.post('/authenticate', async (req, res) => {
 	}
 });
 
-userApiRouter.get('/whoami', jwt.verifyAuthStatus(), (req, res) => {
-	res.json(req.user);
-});
+userApiRouter.get(
+	'/whoami',
+	jwt.verifyAuthStatus({ noRedirect: true }),
+	(req, res) => {
+		res.json(req.user);
+	}
+);
 
 export default userApiRouter;

@@ -33,7 +33,7 @@ app.get('/orderlist', jwt.verifyAuthStatus(), (req, res) => {
 	res.render('index', { user: req.user });
 });
 
-app.get('/me', jwt.verifyAuthStatus(), (req, res) => {
+app.get('/me', (req, res) => {
 	res.render('account', { user: req.user });
 });
 

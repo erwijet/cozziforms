@@ -9,7 +9,7 @@ export interface ICategory extends Document {
 export const CategorySchema: Schema = new Schema({
 	name: { type: String, required: true },
 	children: [{ type: Types.ObjectId, required: true }],
-	vendor: { type: Types.ObjectId, required: true }
+	vendor: { type: Types.ObjectId, ref: 'Vendor', required: true }
 });
 
 const CategoryModel: Model<ICategory> = model('Category', CategorySchema);

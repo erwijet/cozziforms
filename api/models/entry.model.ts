@@ -27,14 +27,14 @@ export interface IEntry extends Document {
 }
 
 export const EntrySchema: Schema = new Schema({
-	itemId: { type: Types.ObjectId, required: true },
-	enterdBy: { type: Types.ObjectId, required: true },
+	itemId: { type: Types.ObjectId, ref: 'Item', required: true },
+	enteredBy: { type: Types.ObjectId, ref: 'User', required: true },
 	enteredOn: { type: Date, required: true },
 	isOrdered: { type: Boolean, required: true, default: false },
-	orderedBy: { type: Types.ObjectId },
+	orderedBy: { type: Types.ObjectId, ref: 'User' },
 	originalQuantity: { type: Number, required: true },
 	currentQuantity: { type: Number, required: true },
-	history: [{ type: Types.ObjectId }],
+	history: [{ type: Types.ObjectId, ref: 'EntryHistory' }],
 	boundedListName: { type: Number, enum: [0, 1], required: true },
 	stale: { type: Boolean, required: true, default: false }
 });

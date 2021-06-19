@@ -3,7 +3,7 @@ import { jwt } from '../auth';
 import { Types } from 'mongoose';
 
 import ItemModel from '../models/item.model';
-import VendorMode from '../models/vendor.model';
+import CategoryModel from '../models/category.model';
 import VendorModel from '../models/vendor.model';
 
 const itemApiRouter = Router();
@@ -32,6 +32,27 @@ itemApiRouter.post(
 			if (err) return res.status(400).json(err);
 			else return res.json(doc);
 		});
+	}
+);
+
+itemApiRouter.post(
+	'/find',
+	jwt.verifyAuthStatus({ noRedirect: true }),
+	async (req, res) => {
+		const query = req.body;
+
+		CategoryModel.init();
+
+		let err;
+		let items = await ItemModel.find(query)
+			.where()
+			.populate('vendor')
+			.populate('category')
+			.catch((_err) => (err = _err));
+
+		if (err) return res.status(400).json(err);
+
+		return res.json(items);
 	}
 );
 

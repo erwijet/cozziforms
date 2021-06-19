@@ -25,11 +25,14 @@ export namespace jwt {
 	const COOKIE_NAME = 'usr';
 
 	export interface JwtPayload {
-		isAdmin: boolean;
-		username: string;
-		firstName: string;
-		lastName: string;
-		objectId: string;
+		isAdmin?: boolean;
+		username?: string;
+		firstName?: string;
+		lastName?: string;
+		objectId?: string;
+
+		// this is here b/c of ts not letting me assign type A to A | undef lol
+		isNull?: boolean;
 	}
 
 	export interface AuthenticationMiddleware {
@@ -51,45 +54,40 @@ export namespace jwt {
 	}
 
 	interface authRequestOpts {
-		isAdmin: boolean;
+		isAdmin?: boolean;
+		noRedirect?: boolean;
 	}
 
-	// select authentication routine to use based on auth level needed
+	// return middleware to authenticate user based on authRequestOpts
 	export function verifyAuthStatus(
 		opts?: authRequestOpts
 	): AuthenticationMiddleware {
-		if (opts?.isAdmin) return requireAuthLevelAdmin;
-		else return requireAuthLevelBasic;
-	}
+		return (req: ExpressReq, res: ExpressRes, next: ExpressNxt) => {
+			decode(req, res, (usr) => {
+				if (usr.isNull) {
+					// user is not authed
+					if (opts?.noRedirect) return res.sendStatus(403);
+					else
+						return res.redirect('/login?rdr=' + encodeURIComponent(req.path));
+				}
 
-	function requireAuthLevelBasic(
-		req: ExpressReq,
-		res: ExpressRes,
-		next: ExpressNxt
-	) {
-		//  regardless of auth status, if any user is logged in,
-		//  then proceed to next request handler
-		decode(req, res, (usr) => {
-			req.user = usr;
-			next();
-		});
-	}
+				// case if admin is requied and admin is provided
+				if (opts?.isAdmin && usr.isAdmin) {
+					req.user = usr;
+					return next();
+				}
 
-	function requireAuthLevelAdmin(
-		req: ExpressReq,
-		res: ExpressRes,
-		next: ExpressNxt
-	) {
-		decode(req, res, (usr) => {
-			if (!usr) return; // response already handled by decode/3
+				// case if admin is NOT required, but a user still exists
+				if (!opts?.isAdmin) {
+					req.user = usr;
+					return next();
+				}
 
-			// if active user is admin, proceed to next handler,
-			// otherwise *handle request* by redirecting to sign in
-			if (usr.isAdmin) {
-				req.user = usr;
-				next();
-			} else return res.redirect('/login?rdr=' + encodeURIComponent(req.path));
-		});
+				// otherwise, admin is requied, but user is not an admin
+				if (opts?.noRedirect) return res.sendStatus(403);
+				else return res.redirect('/login?rdr=' + encodeURIComponent(req.path));
+			});
+		};
 	}
 
 	function decode(
@@ -104,9 +102,7 @@ export namespace jwt {
 		const token = bearerToken ?? req.cookies[COOKIE_NAME];
 
 		// no token no access
-		if (!token)
-			return res.redirect('/login?rdr=' + encodeURIComponent(req.path));
-
+		if (!token) return cb({ isNull: true });
 		jsonWebToken.verify(token, JWT_SECRET, (err: any, usr: any) => {
 			// most likely an api call so don't redirect
 			if (err && bearerToken) return res.sendStatus(403);
@@ -114,7 +110,8 @@ export namespace jwt {
 				// otherwise, if the cookie was incorrect, it's most
 				// likely expired, so prompt user for new cookie.
 				res.clearCookie('usr');
-				return res.redirect('/login?rdr=' + encodeURIComponent(req.path));
+				return cb({ isNull: true });
+				// return res.redirect('/login?rdr=' + encodeURIComponent(req.path));
 			}
 
 			cb(usr as JwtPayload);

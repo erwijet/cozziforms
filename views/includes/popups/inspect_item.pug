@@ -1,0 +1,52 @@
+//- Tyler Holewinski
+//- popups/item.pug
+
+//- describes a popup modal that will prompt the user
+//- to modify information about various items
+
+//- .box
+//-     .field.is-horizontal
+//-         .field-label.is-normal
+//-             label.label Basic
+//-         .field-body
+//-             .field
+//-                 .control.is-expanded.has-icons-left
+//-                     #itemnameTxt.input(disabled type='text' placeholder='Item Name')
+
+//-                     span.icon.is-small.is-left
+//-                         i.fas.fa-quote-right
+//-             .field
+//-                 .control.is-expanded.has-icons-left
+//-                     #unitnameTxt.input(disabled type='text' placeholder='Unit Name')
+
+//-                     span.icon.is-left
+//-                         i.fas.fa-tag
+//-     .field.is-horizontal
+//-         .field-label.is-normal
+//-             label.label Vendor
+//-         .field-body
+//-             .field.is-narrow
+//-                 .control.has-icons-left
+//-                     .select.is-fullwidth
+//-                         select#vendorSelect(disabled)
+//-                     .icon.is-left
+//-                         i.fas.fa-parachute-box
+
+
+include createModalButton
+
+
+mixin inspectItemModal(modal_id)
+    .modal(id=modal_id)
+        .modal-background
+        .modal-card
+            header.modal-card-head
+                p Inspect (item)
+                button.delete(aria-label='close')
+            section.modal-card-body
+
+            footer.modal-card-foot
+                +createModalButton('is-success')
+                    | Save
+                +createModalButton
+                    | Cancel

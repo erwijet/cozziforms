@@ -136,11 +136,12 @@ async function encode(filepath: string, outfile: string) {
 			continue;
 		}
 
-		note(`( ITEM ) item detected ${line}`);
+		note(`( ITEM ) item detected: ${line}`);
 
 		const itemInstance = await ItemModel.create({
 			name: line,
-			vendor: vendorId
+			vendor: vendorId,
+			category: categoryIds[categoryIds.length - 1]
 		});
 
 		await itemInstance.save();
@@ -162,7 +163,10 @@ async function encode(filepath: string, outfile: string) {
 
 (async () => {
 	await checkDBConnection();
-	await encode(__dirname + '/items.txt', __dirname + '/items.json');
+	await encode(
+		__dirname + '/../items-directive.txt',
+		__dirname + '/../items.json'
+	);
 
 	note('( DONE ) goodbye');
 	process.exit();
