@@ -9,18 +9,17 @@
  */
 
 {
+	"ignore": ["lib/require.js"], /* require.js is already compatable */
 	"presets": [
 		[
-			"@babel/env",
+			"@babel/preset-env",
 			{
 				"targets": {
 					"firefox": "42"
 				},
-				"useBuiltIns": "usage"
+				"useBuiltIns": "entry",
+				"corejs": "3"
 			}
 		]
-	],
-	"plugins":  [
-		"@babel/plugin-proposal-optional-chaining"
 	]
 }

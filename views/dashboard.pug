@@ -1,0 +1,77 @@
+extends layout
+
+append head
+    script(src='/js/dashboard.js')
+block body
+    .hero.is-primary
+        .hero-body
+            nav.level
+                .level-left
+                    .level-item(style='padding: 0px 1em')
+                        p.title Admin Dashboard
+                .level-right
+                    .level-item(style='padding: 0px 1em')
+                        .tabs.is-toggle
+                            ul
+                                li#items-tab.is-active.has-text-primary
+                                    a 
+                                        span.icon
+                                            i.fas.fa-boxes
+                                        span Manage Items
+                                li#vendors-tab
+                                    a
+                                        span.icon
+                                            i.fas.fa-parachute-box
+                                        span Manage Vendors
+                                li#users-tab
+                                    a
+                                        span.icon
+                                            i.fas.fa-user
+                                        span Manage Users
+
+    // inspect item modal
+
+    #inspectItemModal.modal
+        .modal-background
+        .modal-card
+            header.modal-card-head  
+                p.modal-card-title#iim-title
+                button.delete(aria-label='close')
+            section.modal-card-body
+                // TODO: add content
+            footer.modal-card-foot
+                button.button.is-success#iim-saveBtn Save Changes
+                button.button#iim-cancelBtn Cancel
+    .box
+        nav.level
+            .level-left
+                .level-item
+                    #newitemBtn.button.is-fullwidth.is-outlined.is-primary
+                        span.icon
+                            i.fas.fa-plus-circle
+                        span New Item
+                .level-item
+                    #managevendorsBtn.button.is-fullwidth.is-outlined.is-primary
+                        span.icon
+                            i.fas.fa-parachute-box 
+                        span Manage Vendors
+                .level-item
+                    .button.is-fullwidth.is-outlined.is-primary
+                        span.icon
+                            i.fas.fa-folder
+                        span Manage Categories  
+            .level-right
+                .level-item
+                    .field(style='width: 100%')
+                        .control.has-icons-left.is-expanded
+                            input#searchboxTxt.input(type='text' placeholder='Search Items')
+                            span.icon.is-left
+                                i.fas.fa-search
+    .box
+        table#itemTable.table.is-fullwidth.is-hoverable
+            thead
+                tr
+                    th Vendor
+                    th Category 
+                    th Item Name
+            tbody

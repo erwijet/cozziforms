@@ -1,5 +1,5 @@
-// hide all scrollbars for now
-// maybe make a custom scrollbar in the future?
+//  hide scrollbars on chrome, mobile, etc.
+//  scrollbar is still shown on clover terminal (Firefox 42)
 
 ::-webkit-scrollbar {
 	display: none;

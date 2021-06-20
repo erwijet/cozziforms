@@ -1,8 +1,6 @@
 import { queryVendors } from './helper/vendors';
 import { queryItems } from './helper/items';
 
-import $ from 'jquery';
-
 async function populateVendorSelect() {
 	const vendors = await queryVendors({});
 	const vendorSelect = $('#vendorSelect');

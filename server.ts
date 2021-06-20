@@ -45,11 +45,8 @@ app.get('/review', jwt.verifyAuthStatus({ isAdmin: true }), (req, res) => {
 	res.render('review', { user: req.user });
 });
 
-app.get('/manage/:key', jwt.verifyAuthStatus({ isAdmin: true }), (req, res) => {
-	const templateName = `manage_${req.params.key}`;
-	if (fs.existsSync(join(__dirname, 'views', templateName + '.pug')))
-		return res.render(templateName, { user: req.user });
-	else return res.end('management page could not be found :(');
+app.get('/dashboard', jwt.verifyAuthStatus({ isAdmin: true }), (req, res) => {
+	res.render('dashboard', { user: req.user });
 });
 
 app.get('/logout', (req, res) => {

@@ -10203,6 +10203,10 @@ a.has-text-danger-dark:hover, a.has-text-danger-dark:focus {
   display: none;
 }
 
+body {
+  scrollbar-width: none;
+}
+
 .navbar-item img {
   max-height: 4rem;
 }

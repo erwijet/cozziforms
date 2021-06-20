@@ -1,3 +1,9 @@
+# heroku.yml
+# Tyler Holewinski
+#
+# define our heroku dyno as container-based,
+# which makes our source code more widly compatable
+
 build:
   docker:
     web: Dockerfile

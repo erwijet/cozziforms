@@ -1,7 +1,6 @@
-import $ from 'jquery';
-import md5 from './helper/hashing';
+import md5 from './lib/crypto';
 
-const params = new URLSearchParams(globalThis.window.location.search);
+const params = new URLSearchParams(window.location.search);
 
 function shakeWindow() {
 	$('#loginBox').removeClass('shake');
@@ -28,7 +27,7 @@ function validate(usr, pas) {
 					$('#errorText').removeClass('is-hidden');
 					$('#loginButton').removeClass('is-loading');
 				}, 200);
-			} else globalThis.window.location.replace(params.get('rdr') || '/');
+			} else window.location.replace(params.get('rdr') || '/');
 		}
 	});
 }
