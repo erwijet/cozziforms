@@ -4,4 +4,4 @@ COPY            . /cozziforms
 RUN             yarn install
 EXPOSE          5050
 
-CMD             [ "yarn", "run", "build-server" ]
+CMD             [ "yarn", "run", "production" ]
