@@ -1,0 +1,15 @@
+# .dockerignore
+# Tyler Holewinski
+#
+# Specify files not exlcuded in .gitignore
+# that are not needed in the docker container
+
+# https://www.youtube.com/watch?v=kgNPuZCyYRY
+**/heroku.yml
+**/.gitignore
+**/.git
+
+# we dont need any dev tasks, except for the bundler so we 
+# can build public-facing js ignored in .gitignore
+tasks/*
+!tasks/bundle-client.js

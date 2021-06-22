@@ -21,6 +21,9 @@ const SOURCE_LIB = join(SOURCE, 'lib');
 const TARGET = join(__dirname, '..', 'public', 'js');
 const TARGET_LIB = join(TARGET, 'lib');
 
+if (!fs.existsSync(TARGET)) fs.mkdirSync(TARGET);
+if (!fs.existsSync(TARGET_LIB)) fs.mkdirSync(TARGET_LIB);
+
 if (isProd) {
 	console.log(
 		'🚛 [  PROD  ] Production mode enabled\n' +
@@ -42,10 +45,8 @@ const files = fs
 	.filter((file) => file.split('.').pop() == 'js')
 	.filter((file) => file != 'require.js'); // don't bundle require.js
 
-if (!fs.existsSync(TARGET_LIB)) fs.mkdirSync(TARGET_LIB);
-
 if (!fs.existsSync(join(TARGET_LIB, 'require.js'))) {
-	console.log('🤷 [  FYI  ] Could not find require.js in public lib folder.');
+	console.log('🤷 [  FYI  ] Could not find require.js in <target>/lib.');
 	console.log('   --------> File will be copied from source');
 	fs.copyFileSync(
 		join(SOURCE_LIB, 'require.js'),

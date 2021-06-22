@@ -1,13 +1,13 @@
-yarn.lock
 .prettierrc
-items-directive.txt
-package-lock.json
 .env
-node_modules/
+
+yarn.lock
 yarn-error.log
 
-# public js files should be built at compile-time
-public/js/**/*
+package-lock.json
+node_modules/
 
-# public css files should be built from sass at compile-time
-public/css/*
+items-directive.txt
+
+# public js files should be built at compile-time
+# public/js/**/*
