@@ -56,4 +56,39 @@ itemApiRouter.post(
 	}
 );
 
+itemApiRouter.post(
+	'/update',
+	jwt.verifyAuthStatus({ isAdmin: true, noRedirect: true }),
+	async (req, res) => {
+		let body: any,
+			{ itemId } = req.body || {};
+
+		if (!itemId) return res.sendStatus(400);
+
+		const itemKeys = [
+			'name',
+			'unitName',
+			'defaultQuantity',
+			'category',
+			'vendor'
+		];
+
+		// refine body to only include valid keys
+		Object.keys(body).forEach((key) => {
+			if (!itemKeys.includes(key)) delete body[key];
+		});
+
+		let _err;
+		const updated = await ItemModel.updateOne(
+			{
+				_id: new Types.ObjectId(itemId)
+			},
+			body
+		).catch((err) => (_err = err));
+
+		if (_err) return res.status(400).json(_err);
+		else return res.json(updated);
+	}
+);
+
 export default itemApiRouter;

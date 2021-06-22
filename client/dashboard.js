@@ -1,9 +1,45 @@
 import { queryVendors } from './helper/vendors';
-import { queryItems } from './helper/items';
+import { queryItems, updateItem } from './helper/items';
+
+const ADMIN_MODE = {
+	Items: 1,
+	Vendors: 2,
+	Users: 3
+};
+
+let curAdminMode = ADMIN_MODE.Items;
+
+function setupHandlers() {
+	$('#items-tab').on('click', (e) => setAdminMode(ADMIN_MODE.Items));
+	$('#vendors-tab').on('click', (e) => setAdminMode(ADMIN_MODE.Vendors));
+	$('#users-tab').on('click', (e) => setAdminMode(ADMIN_MODE.Users));
+
+	$('#iim-deleteBtn').on('click', (e) => {
+		$('#inspectItemModal').removeClass('is-active');
+	});
+
+	$('#searchboxTxt').on('change', (e) => {
+		const query = $('#searchboxTxt').val()?.toString() ?? '';
+		populateItemList(new RegExp(query));
+	});
+}
+
+function setAdminMode(mode) {
+	$('#tabs-ul')
+		.find(`li:nth-child(${curAdminMode})`)
+		.removeClass('has-text-primary is-active');
+	$('#tabs-ul')
+		.find(`li:nth-child(${mode})`)
+		.addClass('has-text-primary is-active');
+	console.log($('#tabs-ul').find(`:nth-child(${mode})`).find(':nth-child(1)'));
+
+	console.log(curAdminMode, mode);
+	curAdminMode = mode;
+}
 
 async function populateVendorSelect() {
 	const vendors = await queryVendors({});
-	const vendorSelect = $('#vendorSelect');
+	const vendorSelect = $('#iim-vendorSelect');
 
 	vendorSelect.empty();
 
@@ -18,6 +54,27 @@ async function populateVendorSelect() {
 	vendorSelect.prop('selectedIndex', -1);
 }
 
+async function launchEditItemModal(item) {
+	await populateVendorSelect();
+	$('#iim-itemnameTxt').val(item.name);
+	$('#iim-unitnameTxt').val(item.unitName);
+	$(`#iim-vendorSelect option[vendorid=${item.vendor._id}]`).attr(
+		'selected',
+		'selected'
+	);
+
+	$('#inspectItemModal').addClass('is-active');
+
+	$('#iim-saveBtn').on('click', async (e) => {
+		await updateItem(item._id.tpString(), {
+			name: $('#iim-itemnameTxt').val(),
+			unitName: $('#iim-unitnameTxt').val(),
+			vendor: $('#iim-vendorSelect').val()
+		});
+		$('#inspectItemModal').removeClass('is-active');
+	});
+}
+
 /**
 
  * @param item The document to append. Should be an IItem with a populated vendor path
@@ -27,8 +84,7 @@ function appendItemToTable(item) {
 	const newRow = $('<tr>')
 		.attr('itemid', item._id)
 		.on('click', (e) => {
-			const itemId = $(this).attr('itemid');
-			$(this).addClass('is-selected');
+			launchEditItemModal(item);
 		});
 
 	[
@@ -65,15 +121,9 @@ async function populateItemList(regex) {
 }
 
 $(async () => {
-	await populateVendorSelect();
+	setupHandlers();
+
 	await populateItemList(/.*/);
-
-	$('#searchboxTxt').on('change', (e) => {
-		console.log($('#searchboxTxt'));
-
-		const query = $('#searchboxTxt').val()?.toString() ?? '';
-		console.log(query, new RegExp(query));
-
-		populateItemList(new RegExp(query));
-	});
+	// await populateVendorSelect();
+	// await populateItemList(/.*/);
 });

@@ -5,13 +5,14 @@
 	"license": "MIT",
 	"scripts": {
 		"build-sass": "sass --no-source-map -q ./sass/styles.scss ./public/css/styles.css",
-		"build-client": "node ./tasks/build-client",
+		"build-client": "node ./tasks/bundle-client",
 		"build-server": "ts-node server.ts",
 		"watch-sass": "nodemon --ext scss --watch sass --exec yarn build-sass",
-		"watch-client": "nodemon --ext ts --watch client --exec yarn run build-client",
+		"watch-client": "nodemon --ext js --watch client/**/* --exec yarn run build-client",
 		"watch-server": "nodemon --ext ts,json --ignore client/*.* --exec yarn build-server",
 		"dockerize": "node tasks/dockerize.js",
-		"babel": "babel --root-mode upward --ignore require.js --copy-files client-lib --out-dir public/js"
+		"babel": "babel --root-mode upward --ignore require.js --copy-files client-lib --out-dir public/js",
+		"production": "yarn run build-sass && yarn run build-client && yarn run build-server"
 	},
 	"dependencies": {
 		"@babel/polyfill": "^7.12.1",
@@ -29,7 +30,7 @@
 		"mongoose": "^5.12.12",
 		"morgan": "^1.10.0",
 		"pug": "^3.0.2",
-		"tsify": "^5.0.4"
+		"uglifyify": "^5.0.2"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.14.5",
