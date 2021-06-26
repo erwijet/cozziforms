@@ -2,12 +2,44 @@ extends layout
 
 append head
     style.
+        /* mode selector animation */
+
         #tabs-ul > li {
             transition: all 200ms ease-in-out;
         }
 
         #tabs-ul > li:hover {
             transform: scale(0.9);
+        }
+
+        /* modal zoom in and out animation */
+
+        #inspectItemModal.is-active > .modal-card {
+            animation: centerZoom 250ms;
+        }
+
+        @keyframes centerZoom {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        /*  special padding rules for the unit label to make
+            it look better */
+
+        @media only screen and (min-width: 768px) {
+            #iim-unitLabel {
+                padding-left: 1em;
+            }
+        }
+
+        @media only screen and (max-width: 768px) {
+            #iim-unitLabel {
+                padding-top: 0.75em;
+            }
         }
     script(src='/js/dashboard.js')
 block body
@@ -59,7 +91,7 @@ block body
                         .control
                             .select
                                 select#iim-vendorSelect                                    option With options
-                        .field-label.is-normal
+                        #iim-unitLabel.field-label.is-normal
                             label.label Unit
                         .field-body
                             .control(style='flex-grow: 1')

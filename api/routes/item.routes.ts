@@ -10,21 +10,19 @@ const itemApiRouter = Router();
 
 itemApiRouter.post(
 	'/create',
-	jwt.verifyAuthStatus({ isAdmin: true }),
+	jwt.verifyAuthStatus({ isAdmin: true, noRedirect: true }),
 	async (req, res) => {
-		const { name, unitName, defaultQuantity, vendorId } = req.body;
+		const { name, unitName, vendorId } = req.body;
 		if (!name || !vendorId) return res.sendStatus(400);
 
 		// verify vendorId is valid
 		if (!(await VendorModel.findById(vendorId))) {
-			console.log('invalid');
-			return res.end();
+			return res.status(400).end('400 - Invalid VendorId');
 		}
 
 		const spec = {
 			name,
 			vendor: new Types.ObjectId(vendorId),
-			defaultQuantity,
 			unitName
 		};
 
@@ -60,8 +58,8 @@ itemApiRouter.post(
 	'/update',
 	jwt.verifyAuthStatus({ isAdmin: true, noRedirect: true }),
 	async (req, res) => {
-		let body: any,
-			{ itemId } = req.body || {};
+		let body: any = req.body;
+		const { itemId } = body || {};
 
 		if (!itemId) return res.sendStatus(400);
 

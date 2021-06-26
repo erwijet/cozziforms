@@ -1,5 +1,5 @@
 import { queryVendors } from './helper/vendors';
-import { queryItems, updateItem } from './helper/items';
+import { queryItems, updateItem, createItem } from './helper/items';
 
 const ADMIN_MODE = {
 	Items: 1,
@@ -21,6 +21,55 @@ function setupHandlers() {
 	$('#searchboxTxt').on('change', (e) => {
 		const query = $('#searchboxTxt').val()?.toString() ?? '';
 		populateItemList(new RegExp(query));
+	});
+
+	console.log($('#newitemBtn'));
+
+	$('#newitemBtn').on('click', async (e) => {
+		// setup inspect item modal to create an item
+
+		function stateChanged(e) {
+			// called any time the vendor select or name textbox is changed
+			const vendorIsSelected =
+				$('#iim-vendorSelect').prop('selectedIndex') != 0;
+			const nameIsSelected = $('#iim-itemnameTxt').val() != '';
+
+			$('#iim-saveBtn').prop('disabled', !vendorIsSelected || !nameIsSelected);
+		}
+
+		await populateVendorSelect();
+		$('#iim-vendorSelect')
+			.prepend($('<option value="" disabled>Select a Vendor</option>'))
+			.prop('selectedIndex', 0)
+			.on('change', stateChanged);
+
+		$('#iim-title').text('New Item');
+		$('#iim-itemnameTxt').val('').on('keyup', stateChanged);
+		$('#iim-unitnameTxt').val('');
+		$('#iim-saveBtn').text('Create Item').prop('disabled', true);
+
+		$('#inspectItemModal').addClass('is-active');
+
+		$('#iim-saveBtn').off('click'); // unbind any old save routine
+
+		// bind updated item save routine to create an item insted of updating one
+		$('#iim-saveBtn').on('click', async (e) => {
+			// get selected vendor id
+			const idx = $('#iim-vendorSelect').prop('selectedIndex');
+			const vendor = $(`#iim-vendorSelect option:nth-child(${idx + 1})`).attr(
+				'vendorid'
+			);
+
+			await updateItem(item._id.toString(), {
+				name: $('#iim-itemnameTxt').val(),
+				unitName: $('#iim-unitnameTxt').val(),
+				vendor
+			});
+
+			$('#inspectItemModal').removeClass('is-active');
+
+			location.reload();
+		});
 	});
 }
 
@@ -56,27 +105,38 @@ async function populateVendorSelect() {
 
 async function launchEditItemModal(item) {
 	await populateVendorSelect();
+	$('#iim-title').text('Inspect Item');
 	$('#iim-itemnameTxt').val(item.name);
 	$('#iim-unitnameTxt').val(item.unitName);
-	$(`#iim-vendorSelect option[vendorid=${item.vendor._id}]`).attr(
-		'selected',
-		'selected'
-	);
+
+	$('#iim-vendorSelect').prop('value', item.vendor.name);
 
 	$('#inspectItemModal').addClass('is-active');
 
+	// remove any old click handlers
+	$('#iim-saveBtn').off('click');
+
+	// define item update routine
 	$('#iim-saveBtn').on('click', async (e) => {
-		await updateItem(item._id.tpString(), {
+		// get selected vendor id
+		const idx = $('#iim-vendorSelect').prop('selectedIndex');
+		const vendor = $(`#iim-vendorSelect option:nth-child(${idx + 1})`).attr(
+			'vendorid'
+		);
+
+		await updateItem(item._id.toString(), {
 			name: $('#iim-itemnameTxt').val(),
 			unitName: $('#iim-unitnameTxt').val(),
-			vendor: $('#iim-vendorSelect').val()
+			vendor
 		});
+
 		$('#inspectItemModal').removeClass('is-active');
+
+		location.reload();
 	});
 }
 
 /**
-
  * @param item The document to append. Should be an IItem with a populated vendor path
  */
 function appendItemToTable(item) {
@@ -102,13 +162,6 @@ async function populateItemList(regex) {
 	const itemTableBody = $('#itemTable').find('tbody');
 
 	itemTableBody.empty();
-
-	console.log(regex.source, {
-		name: {
-			$regex: regex.source,
-			$options: 'i'
-		}
-	});
 
 	const items = await queryItems({
 		name: {
