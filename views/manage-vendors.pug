@@ -1,0 +1,32 @@
+extends dashboard_layout
+
+append head
+    style.
+        /* modal zoom in and out animation */
+
+        #newVendorModal.is-active > .modal-card {
+            animation: centerZoom 250ms ease-in-out;
+        }
+
+        #newVendorModal.is-closing > .modal-card {
+            animation: centerZoomOut 250ms;
+        }
+
+        @keyframes centerZoomOut {
+            0% {
+                transform: scale(1);
+            }
+            100% {
+                transform: scale(0);
+            }
+        }
+
+        @keyframes centerZoom {
+            0% {
+                transform: scale(0);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+    script(src='/js/manage-vendors.js')
