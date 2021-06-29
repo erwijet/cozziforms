@@ -10,5 +10,6 @@ node_modules/
 items-directive.txt
 items.json
 
-# public js files should be built at compile-time
+# these assets should be generated at build-time
 public/js/**/*.js
+public/css/styles.css
