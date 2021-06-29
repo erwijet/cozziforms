@@ -28,14 +28,26 @@ export async function updateItem(itemId, fields) {
 	);
 }
 
-export async function createItem(name, vendorId) {
+export async function createItem(name, vendorId, unitName = 'units') {
 	return (
 		(await ajax({
 			url: '/api/item/create',
 			method: 'POST',
 			dataType: 'json',
 			contentType: 'application/json',
-			data: JSON.stringify({ name, vendorId })
+			data: JSON.stringify({ name, vendorId, unitName })
+		})) || []
+	);
+}
+
+export async function deleteItem(id) {
+	return (
+		(await ajax({
+			url: '/api/item/delete',
+			method: 'POST',
+			dataType: 'json',
+			contentType: 'application/json',
+			data: JSON.stringify({ _id: id.toString() })
 		})) || []
 	);
 }

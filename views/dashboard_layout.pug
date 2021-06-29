@@ -1,0 +1,40 @@
+extends layout
+
+append head
+    style.
+        /* mode selector animation */
+
+        #tabs-ul > li {
+            transition: all 200ms ease-in-out;
+        }
+
+        #tabs-ul > li:hover {
+            transform: scale(0.9);
+        }
+
+append body
+    .hero.is-primary
+        .hero-body
+            nav.level
+                .level-left
+                    .level-item(style='padding: 0px 1em')
+                        p.title Admin Dashboard
+                .level-right
+                    .level-item(style='padding: 0px 1em')
+                        .tabs.is-toggle
+                            ul#tabs-ul
+                                li#items-tab.is-active.has-text-primary
+                                    a(href='/dashboard/items')
+                                        span.icon
+                                            i.fas.fa-boxes
+                                        span Items
+                                li#vendors-tab
+                                    a(href='/dashboard/vendors')
+                                        span.icon
+                                            i.fas.fa-parachute-box
+                                        span Vendors
+                                li#users-tab
+                                    a(href='/dashboard/users')
+                                        span.icon
+                                            i.fas.fa-user
+                                        span Users

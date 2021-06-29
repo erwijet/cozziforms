@@ -89,4 +89,21 @@ itemApiRouter.post(
 	}
 );
 
+itemApiRouter.post(
+	'/delete',
+	jwt.verifyAuthStatus({ isAdmin: true, noRedirect: true }),
+	async (req, res) => {
+		const { _id } = req.body;
+		if (!_id) return res.status(400).end('missing _id value');
+
+		let _err;
+		const removed = await ItemModel.findByIdAndRemove(
+			new Types.ObjectId(_id)
+		).catch((err) => (_err = err));
+
+		if (_err) return res.status(400).json(_err);
+		else return res.json(removed);
+	}
+);
+
 export default itemApiRouter;

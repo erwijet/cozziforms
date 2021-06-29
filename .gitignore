@@ -8,6 +8,7 @@ package-lock.json
 node_modules/
 
 items-directive.txt
+items.json
 
 # public js files should be built at compile-time
-# public/js/**/*
+public/js/**/*

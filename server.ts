@@ -2,11 +2,11 @@ import express from 'express';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
-import fs from 'fs';
 import { join } from 'path';
 
 import { jwt } from './api/auth';
 import api from './api/api';
+import redirects from './redirect-handler';
 
 dotenv.config();
 
@@ -19,11 +19,8 @@ app.use(morgan('common'));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.static(join(__dirname, 'public')));
+app.use('/', redirects);
 app.use('/api', api);
-
-app.get('/', (req, res) => {
-	res.redirect('/orderlist');
-});
 
 app.get('/login', (req, res) => {
 	res.render('login');
@@ -45,9 +42,26 @@ app.get('/review', jwt.verifyAuthStatus({ isAdmin: true }), (req, res) => {
 	res.render('review', { user: req.user });
 });
 
-app.get('/dashboard', jwt.verifyAuthStatus({ isAdmin: true }), (req, res) => {
-	res.render('dashboard', { user: req.user });
-});
+app.get(
+	'/dashboard/:key',
+	jwt.verifyAuthStatus({ isAdmin: true }),
+	(req, res) => {
+		const { key } = req.params;
+
+		const renderOpts = { user: req.user };
+
+		switch (key) {
+			case 'items':
+				return res.render('manage-items', renderOpts);
+			case 'vendors':
+				return res.render('manage-vendors', renderOpts);
+			case 'users':
+				return res.render('manage-users', renderOpts);
+			default:
+				return res.redirect('/dashboard/items');
+		}
+	}
+);
 
 app.get('/logout', (req, res) => {
 	jwt.revoke(res);
