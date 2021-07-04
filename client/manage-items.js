@@ -1,6 +1,7 @@
 import { queryVendors } from './helper/vendors';
 import { queryItems, updateItem, createItem, deleteItem } from './helper/items';
 import { setAdminMode, ADMIN_MODE } from './dashboard';
+import confirmAction from './confirmation';
 
 function setupHandlers() {
 	$('#iim-cancelBtn').on('click', (e) => {
@@ -141,8 +142,14 @@ async function itemSaveBtnClick(item) {
 }
 
 async function itemDeleteBtnClick(item) {
-	await deleteItem(item._id);
-	location.reload();
+	confirmAction(
+		`Delete <span class="tag">${item.name}</span> supplied by ${item.vendor.name}? This action will remove any entries on any lists that reference this item.`,
+		async () => {
+			await deleteItem(item._id);
+			location.reload();
+		},
+		() => closeEditItemModal()
+	);
 }
 
 /**

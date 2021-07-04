@@ -1,0 +1,19 @@
+script(src='/js/confirmation.js')
+
+#confirmModal.modal
+    .modal-background
+    .modal-card
+        header.modal-card-head  
+            p.modal-card-title#iim-title Are you sure?
+            button#iim-cornerCloseBtn.delete(aria-label='close')
+        section.modal-card-body
+            p#cnfrm-prompt.has-text-centered
+
+        footer.modal-card-foot
+            nav.level(style='width: 100%')
+                .level-left(style='flex-grow: 1')
+                    .level-item(style='flex-grow: 0.9')
+                        button.button.is-primary.is-fullwidth#cnfrm-yes Confirm
+                .level-right(style='flex-grow: 1')
+                    .level-item(style='flex-grow: 0.9')
+                        button.button.is-fullwidth.is-pulled-right#cnfrm-no Cancel

@@ -2,8 +2,13 @@ import { Router } from 'express';
 import UserModel from '../models/user.model';
 
 import { jwt } from '../auth';
+import { Types } from 'mongoose';
 
 const userApiRouter = Router();
+
+interface StringIndexed {
+	[key: string]: string;
+}
 
 userApiRouter.post(
 	'/create',
@@ -54,6 +59,29 @@ userApiRouter.get(
 	jwt.verifyAuthStatus({ noRedirect: true }),
 	(req, res) => {
 		res.json(req.user);
+	}
+);
+
+userApiRouter.post(
+	'/update',
+	jwt.verifyAuthStatus({ isAdmin: true, noRedirect: true }),
+	async (req, res) => {
+		const { id } = req.body;
+
+		let updateSpec: StringIndexed = {};
+
+		['username', 'firstName', 'lastName', 'isAdmin', 'hash'].forEach((key) => {
+			if (req.body[key]) updateSpec[key] = req.body[key];
+		});
+
+		let _err;
+		const updated = await UserModel.findByIdAndUpdate(
+			new Types.ObjectId(id),
+			updateSpec
+		).catch((err) => (_err = err));
+
+		if (_err) return res.status(400).json(_err);
+		else return res.json(updated);
 	}
 );
 

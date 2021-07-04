@@ -30,3 +30,58 @@ append head
             }
         }
     script(src='/js/manage-vendors.js')
+
+append body
+    include includes/confirmation-modal
+
+    // inspect vendor modal
+
+    #inspectVendorModal.modal
+        .modal-background
+        .modal-card
+            header.modal-card-head  
+                p.modal-card-title#iim-title Inspect Vendor
+                button#iim-cornerCloseBtn.delete(aria-label='close')
+            section.modal-card-body
+                .field.is-horizontal
+                    .field-label.is-normal
+                        label.label Name
+                    .field-body
+                        .control(style='flex-grow: 1')
+                            input#iim-itemnameTxt.input(type='text' placeholder='vendor name...')
+
+            footer.modal-card-foot
+                nav.level(style='width: 100%')
+                    .level-left
+                        .level-item
+                            button.button.is-primary#iim-saveBtn Save Changes
+                    .level-right
+                        .level-item
+                            .buttons
+                                button.button.is-pulled-right#iim-deleteBtn
+                                    span.icon
+                                        i.fas.fa-trash
+                                    span Delete Vendor
+                                button.button#iim-cancelBtn Cancel
+    .box
+        nav.level
+            .level-left
+                .level-item
+                    #newitemBtn.button.is-fullwidth.is-outlined.is-primary
+                        span.icon
+                            i.fas.fa-plus-circle
+                        span New Vendor
+            .level-right
+                .level-item
+                    .field(style='width: 100%')
+                        .control.has-icons-left.is-expanded
+                            input#searchboxTxt.input(type='text' placeholder='Search Vendors')
+                            span.icon.is-left
+                                i.fas.fa-search
+    .box(style='margin: 0px 10%')
+        table#itemTable.table.is-fullwidth.is-hoverable
+            thead
+                tr
+                    th.has-text-centered Vendor Name
+                    th.has-text-centered Associated Items
+            tbody
