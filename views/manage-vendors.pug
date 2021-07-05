@@ -40,34 +40,34 @@ append body
         .modal-background
         .modal-card
             header.modal-card-head  
-                p.modal-card-title#iim-title Inspect Vendor
-                button#iim-cornerCloseBtn.delete(aria-label='close')
+                p.modal-card-title#ivm-title Inspect Vendor
+                button#ivm-cornerCloseBtn.delete(aria-label='close')
             section.modal-card-body
                 .field.is-horizontal
                     .field-label.is-normal
                         label.label Name
                     .field-body
                         .control(style='flex-grow: 1')
-                            input#iim-itemnameTxt.input(type='text' placeholder='vendor name...')
+                            input#ivm-nameTxt.input(type='text' placeholder='vendor name...')
 
             footer.modal-card-foot
                 nav.level(style='width: 100%')
                     .level-left
                         .level-item
-                            button.button.is-primary#iim-saveBtn Save Changes
+                            button.button.is-primary#ivm-saveBtn Save Changes
                     .level-right
                         .level-item
                             .buttons
-                                button.button.is-pulled-right#iim-deleteBtn
+                                button.button.is-pulled-right#ivm-deleteBtn
                                     span.icon
                                         i.fas.fa-trash
                                     span Delete Vendor
-                                button.button#iim-cancelBtn Cancel
+                                button.button#ivm-cancelBtn Cancel
     .box
         nav.level
             .level-left
                 .level-item
-                    #newitemBtn.button.is-fullwidth.is-outlined.is-primary
+                    #newVendorBtn.button.is-fullwidth.is-outlined.is-primary
                         span.icon
                             i.fas.fa-plus-circle
                         span New Vendor
@@ -79,9 +79,9 @@ append body
                             span.icon.is-left
                                 i.fas.fa-search
     .box(style='margin: 0px 10%')
-        table#itemTable.table.is-fullwidth.is-hoverable
+        table#vendorTable.table.is-fullwidth.is-hoverable
             thead
                 tr
-                    th.has-text-centered Vendor Name
-                    th.has-text-centered Associated Items
+                    th Vendor Name
+                    th Associated Items
             tbody
