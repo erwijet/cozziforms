@@ -11,6 +11,10 @@ export default function confirmAction(prompt, onYes, onNo = () => {}) {
 	});
 
 	$('#cnfrm-prompt').html(prompt);
+	$('#cnfrm-cornerCloseBtn').on('click', (e) => {
+		$('#confirmModal').removeClass('is-active');
+	});
+
 	$('#cnfrm-yes')
 		.off('click')
 		.on('click', (e) => {
